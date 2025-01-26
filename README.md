@@ -1,4 +1,4 @@
-# job4j_grabber
+# Job4j_grabber
 
 Этот проект представляет собой парсер вакансий для Java-разработчиков с сайта [Habr Career](https://career.habr.com/vacancies/java_developer).
 
