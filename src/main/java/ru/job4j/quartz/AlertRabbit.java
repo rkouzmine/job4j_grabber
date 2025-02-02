@@ -22,14 +22,22 @@ public class AlertRabbit {
             LOG.info("Starting scheduler...");
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
-            JobDetail job = newJob(Rabbit.class).build();
+
+            /*Создаем JobDetail с параметрами*/
+            JobDetail job = newJob(Rabbit.class)
+                    .usingJobData("param1", "Hello, Rabbit!")
+                    .usingJobData("param2", 1337)
+                    .build();
+
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(Integer.parseInt(loadProperties().getProperty("rabbit.interval")))
+                    .withIntervalInSeconds(10)
                     .repeatForever();
+
             Trigger trigger = newTrigger()
                     .startNow()
                     .withSchedule(times)
                     .build();
+
             scheduler.scheduleJob(job, trigger);
         } catch (SchedulerException se) {
             LOG.error("Execution schedule error.", se);
@@ -39,7 +47,11 @@ public class AlertRabbit {
     public static class Rabbit implements Job {
         @Override
         public void execute(JobExecutionContext context) {
-            System.out.println("Rabbit runs here ...");
+            /*Получаем параметры из JobDataMap*/
+            String param1 = context.getJobDetail().getJobDataMap().getString("param1");
+            int param2 = context.getJobDetail().getJobDataMap().getInt("param2");
+
+            System.out.printf("Rabbit runs here with param1: %s And param2: %d%n", param1, param2);
         }
     }
 
