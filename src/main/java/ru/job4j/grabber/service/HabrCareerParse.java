@@ -37,6 +37,8 @@ public class HabrCareerParse implements Parse {
                     String link = String.format("%s%s", SOURCE_LINK,
                             linkElement.attr("href"));
 
+                    var vacancyDescription = retrieveDescription(link);
+
                     var dateElement = row.select(".vacancy-card__date").first();
                     var element = dateElement.child(0);
                     var time = element.attr("datetime");
@@ -44,15 +46,29 @@ public class HabrCareerParse implements Parse {
                     LocalDateTime localDateTime = habrCareerDateTimeParser.parse(time);
                     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("UTC"));
                     long vacancyDate = zonedDateTime.toInstant().toEpochMilli();
-                    System.out.printf("%s %s %s%n", vacancyName, link, vacancyDate);
+                    System.out.printf("%s %s %s%n%s%n", vacancyName, link, vacancyDate, vacancyDescription);
 
                     var post = new Post();
                     post.setTitle(vacancyName);
                     post.setLink(link);
                     post.setTime(vacancyDate);
+                    post.setDescription(vacancyDescription);
                     result.add(post);
                 });
             }
+        } catch (IOException e) {
+            LOG.error("When load page", e);
+        }
+        return result;
+    }
+
+    private String retrieveDescription(String link) {
+        String result = null;
+        try {
+            var connection = Jsoup.connect(link);
+            var document = connection.get();
+            var descriptionElement = document.select(".vacancy-description__text").first();
+            result = descriptionElement.text();
         } catch (IOException e) {
             LOG.error("When load page", e);
         }
