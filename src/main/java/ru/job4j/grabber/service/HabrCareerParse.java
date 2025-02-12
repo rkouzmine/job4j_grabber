@@ -16,10 +16,16 @@ import java.util.List;
 public class HabrCareerParse implements Parse {
 
     private static final Logger LOG = Logger.getLogger(HabrCareerParse.class);
+
     private static final String SOURCE_LINK = "https://career.habr.com";
     private static final String PREFIX = "/vacancies?page=";
     private static final String SUFFIX = "&q=Java%20developer&type=all";
     private static final int NUMBER_OF_PAGES = 5;
+    private final DateTimeParser dateTimeParser;
+
+    public HabrCareerParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
 
     @Override
     public List<Post> fetch() {
@@ -46,7 +52,6 @@ public class HabrCareerParse implements Parse {
                     LocalDateTime localDateTime = habrCareerDateTimeParser.parse(time);
                     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("UTC"));
                     long vacancyDate = zonedDateTime.toInstant().toEpochMilli();
-                    System.out.printf("%s %s %s%n%s%n", vacancyName, link, vacancyDate, vacancyDescription);
 
                     var post = new Post();
                     post.setTitle(vacancyName);
