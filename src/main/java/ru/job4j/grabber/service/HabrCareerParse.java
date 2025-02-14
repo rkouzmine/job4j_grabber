@@ -56,8 +56,8 @@ public class HabrCareerParse implements Parse {
                     var post = new Post();
                     post.setTitle(vacancyName);
                     post.setLink(link);
-                    post.setTime(vacancyDate);
                     post.setDescription(vacancyDescription);
+                    post.setTime(vacancyDate);
                     result.add(post);
                 });
             }
@@ -73,7 +73,7 @@ public class HabrCareerParse implements Parse {
             var connection = Jsoup.connect(link);
             var document = connection.get();
             var descriptionElement = document.select(".vacancy-description__text").first();
-            result = descriptionElement.text();
+            result = descriptionElement != null ? descriptionElement.text() : "";
         } catch (IOException e) {
             LOG.error("When load page", e);
         }

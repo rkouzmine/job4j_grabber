@@ -61,6 +61,11 @@
       <artifactId>javalin</artifactId>
       <version>6.4.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+      <version>4.28.0</version>
+    </dependency>
 
   </dependencies>
 
@@ -119,6 +124,14 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>4.28.0</version>
+        <configuration>
+          <propertyFile>src/main/resources/application.properties</propertyFile>
+        </configuration>
       </plugin>
     </plugins>
   </build>

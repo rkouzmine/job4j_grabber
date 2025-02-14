@@ -23,11 +23,11 @@ public class Config {
     }
 
     public Connection initConnection() throws SQLException, ClassNotFoundException {
-        Class.forName(properties.getProperty("db.driver-class-name"));
+        Class.forName(properties.getProperty("driver-class-name"));
         return DriverManager.getConnection(
-                    properties.getProperty("db.url"),
-                    properties.getProperty("db.username"),
-                    properties.getProperty("db.password")
+                    properties.getProperty("url"),
+                    properties.getProperty("username"),
+                    properties.getProperty("password")
             );
         }
 

@@ -22,11 +22,11 @@ public class JdbcStore implements Store {
     @Override
     public void save(Post post) {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO post (name, text, link, created) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO post (title, link, description, time) VALUES (?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, post.getTitle());
-                statement.setString(2, post.getDescription());
-                statement.setString(3, post.getLink());
+                statement.setString(2, post.getLink());
+                statement.setString(3, post.getDescription());
                 statement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
                 statement.execute();
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -73,10 +73,10 @@ public class JdbcStore implements Store {
     private Post createPost(ResultSet resultSet) throws SQLException {
         return new Post(
                 resultSet.getLong("id"),
-                resultSet.getString("name"),
-                resultSet.getString("text"),
+                resultSet.getString("title"),
                 resultSet.getString("link"),
-                resultSet.getTimestamp("created").getTime()
+                resultSet.getString("description"),
+                resultSet.getTimestamp("time").getTime()
         );
     }
 

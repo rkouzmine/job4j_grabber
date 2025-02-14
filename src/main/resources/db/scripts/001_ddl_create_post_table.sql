@@ -1,7 +1,7 @@
-create table post (
-    id serial primary key,
-    name varchar(100),
-    text text,
-    link text unique,
-    created Timestamp WITHOUT TIME ZONE
+CREATE TABLE post (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100),
+    link TEXT UNIQUE,
+    description TEXT,
+    time TIMESTAMP WITHOUT TIME ZONE
 );
